@@ -18,10 +18,13 @@ BASE_PATH = 'http://127.0.0.1:8090'
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Привет', reply_markup=main_keyboard)
+    bot.send_message(message.chat.id, 'Добрый день, для работы необходимо сгенерировать token в сервисе.\n'
+                                      'Нажать на кнопку "Добавить токен".\n'
+                                      'Дождавшись приглашения от бота, ввести токен.', reply_markup=main_keyboard)
 
 @logger.catch
 def check_telegram_token(token):
+    """Проверяет введённый токен на сервере."""
     data = {'telegram_token': token.text, 'chat_id': token.chat.id}
     res = requests.post(f'{BASE_PATH}/api/v1/messages/check_telegram_token/', json=data)
     bot.send_message(token.chat.id, res)
